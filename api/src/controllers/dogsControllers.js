@@ -22,8 +22,7 @@ const getAllDogsControllers = async () => {
       });
     });
     await Promise.all(allDogsPromises);
-    const allDogs = Dog.findAll();
-    return allDogs;
+    return Dog.findAll();
   } catch (error) {
     throw error;
   }
