@@ -3,26 +3,37 @@ const { Op } = require("sequelize");
 const { Dog } = require("../db");
 
 const url = "https://api.thedogapi.com/v1/breeds";
-const url_images = "https://api.thedogapi.com/v1/images";
+const url_images = "https://cdn2.thedogapi.com/images";
 
 const getAllDogsControllers = async () => {
   try {
     const dogs = (await axios.get(url)).data;
-    const allDogsPromises = dogs.map(async (dog) => {
-      const image = (await axios.get(`${url_images}/${dog.reference_image_id}`))
-        .data;
-      await Dog.findOrCreate({
-        where: {
-          name: dog.name,
-          image: image.url,
-          height: dog.height.metric,
-          weight: dog.weight.metric,
-          life_span: dog.life_span,
-        },
-      });
-    });
-    await Promise.all(allDogsPromises);
-    return Dog.findAll();
+    const imageExtensions = [".jpg", ".png"];
+    await Promise.all(
+      dogs.map(async (dog) => {
+        let successfulExtension = "";
+        for (const extension of imageExtensions) {
+          try {
+            await axios.get(
+              `${url_images}/${dog.reference_image_id}${extension}`
+            );
+            successfulExtension = extension;
+          } catch (error) {}
+        }
+        if (successfulExtension) {
+          await Dog.findOrCreate({
+            where: {
+              name: dog.name,
+              image: `${url_images}/${dog.reference_image_id}${successfulExtension}`,
+              height: dog.height.metric,
+              weight: dog.weight.metric,
+              life_span: dog.life_span,
+            },
+          });
+        }
+      })
+    );
+    return await Dog.findAll();
   } catch (error) {
     throw error;
   }
@@ -42,6 +53,7 @@ const getRazaByIdController = async (id, source) => {
 
 const getDogByNameController = async (name) => {
   try {
+    const imageExtensions = [".jpg", ".png"];
     const apiResponse = (await axios.get(url)).data;
     const apiBreeds = apiResponse.filter((breed) =>
       breed.name.toLowerCase().includes(name)
@@ -53,7 +65,27 @@ const getDogByNameController = async (name) => {
         },
       },
     });
-    const matchingBreeds = [...apiBreeds, ...dbBreeds];
+    const enrichedApiBreeds = apiBreeds.map(async (breed) => {
+      for (const extension of imageExtensions) {
+        try {
+          await axios.get(`${url_images}/${breed.reference_image_id}${extension}`);
+          breed.image = `${url_images}/${breed.reference_image_id}${extension}`;
+        } catch (error) {}
+      }
+      const matchingDbBreed = dbBreeds.find(
+        (dbBreed) => dbBreed.name === breed.name
+      );
+      if (matchingDbBreed) {
+        breed.dbInfo = matchingDbBreed.image;
+      }
+      return breed;
+    });
+    await Promise.all(enrichedApiBreeds);
+    const matchingBreeds = [...apiBreeds, ...dbBreeds].filter(
+      (value, index, self) => {
+        return self.findIndex((b) => b.name === value.name) === index;
+      }
+    );
     if (matchingBreeds.length === 0)
       throw new Error("No se encontraron razas de perros con ese nombre.");
     return matchingBreeds;
@@ -69,8 +101,8 @@ const createDogController = async (name, image, height, weight, life_span) => {
       image: image,
       height: height,
       weight: weight,
-      life_span: life_span
-    })
+      life_span: life_span,
+    });
     return newBreed;
   } catch (error) {
     return res.status(400).send(error.message);
