@@ -39,13 +39,25 @@ const getAllDogsControllers = async () => {
   }
 };
 
-const getRazaByIdController = async (id, source) => {
+const getBreedByIdController = async (id, source) => {
   try {
-    const raza =
-      source === "api"
-        ? (await axios.get(`${url}/${id}`)).data
-        : await Dog.findByPk(id);
-    return raza;
+    let breed;
+    if (source === "api") {
+      breed = (await axios.get(`${url}/${id}`)).data;
+      const imageExtensions = [".jpg", ".png"];
+      for (const extension of imageExtensions) {
+        try {
+          await axios.get(
+            `${url_images}/${breed.reference_image_id}${extension}`
+          );
+          breed.image = `${url_images}/${breed.reference_image_id}${extension}`
+        } catch (error) {}
+      }
+      if (source === "db") {
+        breed = await Dog.findByPk(id);
+      }
+      return breed;
+    }
   } catch (error) {
     throw error;
   }
@@ -68,7 +80,9 @@ const getDogByNameController = async (name) => {
     const enrichedApiBreeds = apiBreeds.map(async (breed) => {
       for (const extension of imageExtensions) {
         try {
-          await axios.get(`${url_images}/${breed.reference_image_id}${extension}`);
+          await axios.get(
+            `${url_images}/${breed.reference_image_id}${extension}`
+          );
           breed.image = `${url_images}/${breed.reference_image_id}${extension}`;
         } catch (error) {}
       }
@@ -111,7 +125,7 @@ const createDogController = async (name, image, height, weight, life_span) => {
 
 module.exports = {
   getAllDogsControllers,
-  getRazaByIdController,
+  getBreedByIdController,
   getDogByNameController,
   createDogController,
 };

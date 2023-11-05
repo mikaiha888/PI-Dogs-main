@@ -1,6 +1,6 @@
 const {
   getAllDogsControllers,
-  getRazaByIdController,
+  getBreedByIdController,
   getDogByNameController,
   createDogController
 } = require("../controllers/dogsControllers");
@@ -14,11 +14,11 @@ const getAllDogs = async (req, res) => {
   }
 };
 
-const getRazaById = async (req, res) => {
+const getBreedById = async (req, res) => {
   try {
     const { id } = req.params;
     const source = isNaN(id) ? "db" : "api";
-    const response = await getRazaByIdController(id, source);
+    const response = await getBreedByIdController(id, source);
     res.status(200).json(response);
   } catch (error) {
     res.status(500).send(error.message);
@@ -50,7 +50,7 @@ const createDog = async (req, res) => {
 
 module.exports = {
   getAllDogs,
-  getRazaById,
+  getBreedById,
   getDogByName,
   createDog
 };
