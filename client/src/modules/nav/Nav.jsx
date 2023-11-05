@@ -7,7 +7,7 @@ const Nav = () => {
       <SearchBar />
       <ul>
         <ButtonList link="/home" buttonName="Home" />
-        <ButtonList link="/profile" buttonName="Profile" />
+        <ButtonList link="/dogs" buttonName="Dogs!" />
         <ButtonList link="/" buttonName="Log Out" />
       </ul>
     </nav>

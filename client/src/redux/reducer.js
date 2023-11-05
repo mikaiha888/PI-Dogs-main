@@ -1,10 +1,12 @@
 import { 
     GET_ALL_BREEDS,
+    GET_DETAIL,
     SEARCH_BREED,
 } from "./action-types";
 
 const initialState = {
     allBreeds: [],
+    breed: {}
 };
 
 const reducer = (state = initialState, action) => {
@@ -19,6 +21,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 allBreeds: action.payload
+            }
+        case GET_DETAIL:
+            return {
+                ...state,
+                breed: action.payload
             }
     
         default:

@@ -1,14 +1,27 @@
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getDetail } from "../../redux/actions";
+import { useParams } from "react-router-dom";
 
 
-const Detail = ({ id, name, image, height, weight, temperament, life_span }) => {
+const Detail = () => {
+  const { id } = useParams();
+  const { breed } = useSelector((state) => state);
+  const dispatch = useDispatch();
+  console.log(breed);
+
+  useEffect(() => {
+    dispatch(getDetail(id));
+  }, []);
+  
     return (
       <div>
-        <img src={image} alt={name} />
-        <h3>{name}</h3>
-        <p>{temperament}</p>
-        <p>{height}</p>
-        <p>{weight}</p>
-        <p>{life_span}</p>
+        <img src={breed.image} alt={breed.name} />
+        <h3>{breed.name}</h3>
+        <p>{breed.temperament}</p>
+        <p>{breed.height?.metric}</p>
+        <p>{breed.weight?.metric}</p>
+        <p>{breed.life_span}</p>
       </div>
     );
 }
