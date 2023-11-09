@@ -1,0 +1,25 @@
+.footer {
+    padding: 5rem;
+    margin-top: 5rem;
+    background: #313131;
+    text-align: center;
+}
+
+.footer ul {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.footer ul li a {
+    color: white;
+    padding: 0.25rem 0.75rem;
+    border-radius: 5rem;
+    font-size: 1.10rem;
+    font-weight: 600;
+}
+
+.footer ul li a:hover {
+    color: rgb(82, 46, 40);
+    background: white;
+}

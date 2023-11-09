@@ -1,0 +1,28 @@
+.pagination {
+    margin: 3rem auto;
+}
+
+.pagination button {
+    padding: 0.25rem 1rem;
+    margin: 0.25rem 1rem;
+    border: none;
+    border-radius: 10rem;
+    background: none;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.pagination button:hover {
+    color: rgb(177, 75, 59);
+}
+
+.pagination button:disabled {
+    color: rgb(153, 153, 153);
+    cursor: default;
+}
+
+.current {
+    color: rgb(177, 75, 59);;
+    font-weight: 900;
+}

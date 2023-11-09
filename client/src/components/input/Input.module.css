@@ -1,0 +1,29 @@
+.input {
+    text-align: left;
+}
+
+.input label {
+    margin-left: 0.75rem;
+    color: #313131;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.input input {
+    width: 500px;
+    padding: 0.5rem 0.75rem;
+    margin: 0.3rem 0;
+    border: none;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+}
+
+.input p {
+    margin: 0 0 0.5rem 0.75rem;
+    color: rgb(177, 75, 59);
+    font-size: 0.9rem;
+}
+
+.input input:focus {
+    outline: solid 2px rgb(177, 75, 59);
+}

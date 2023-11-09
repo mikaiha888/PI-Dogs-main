@@ -1,0 +1,24 @@
+.catalogue {
+    margin: 2rem 0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.catalogue h2 {
+    font-size: 2rem;
+}
+
+.catalogue hr {
+    width: 90%;
+    margin: auto;
+    border: solid 0.75px #ecece9;
+}
+
+.selectorContainer {
+    margin-bottom: 3rem;
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+}

@@ -1,10 +1,11 @@
-import ButtonNormal from "../../components/button-normal/ButtonNormal"
+import style from "./Landing.module.css";
+
 const Landing = () => {
   return (
-    <div>
-        <h1>Welcome!</h1>
-        <ButtonNormal link={'/home'} buttonName={'Start'} />
-    </div>
-  )
-}
-export default Landing
+    <section className={style.dogGuide}>
+      <h1>The Dog Guide</h1>
+      <p>Conocer mejor a tu compañero de vida</p>
+    </section>
+  );
+};
+export default Landing;

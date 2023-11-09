@@ -37,11 +37,14 @@ const getDogByName = async (req, res) => {
 };
 
 const createDog = async (req, res) => {
-    const { name, image, height, weight, life_span } = req.body;
-    if (!name || !image || !height || !weight || !life_span)
+    const { name, image, height, weight, life_span, temperament } = req.body;
+    if (!name || !image || !height || !weight || !life_span || !temperament)
       res.status(400).send("Faltan datos");
     try {
-        const response = await createDogController(name, image, height, weight, life_span);
+        const response = await createDogController(name, image, height, weight, life_span, temperament);
+        if (response.error && response.breed) {
+          return res.status(422).send(response.error);
+        }
         res.status(201).json(response);
     } catch (error) {
         res.status(500).send(error.message);

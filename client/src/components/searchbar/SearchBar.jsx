@@ -1,3 +1,5 @@
+import style from './SearchBar.module.css';
+
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { searchBreed } from "../../redux/actions";
@@ -19,10 +21,10 @@ const SearchBar = () => {
   };
 
   return (
-    <div>
+    <div className={style.searchbar}>
       <input type="search" onChange={handleChange} onKeyDown={handleEnter} />
       <button onClick={handleSearch}>
-        <img src="../../public/img/search-icon.png" alt="seach icon" />
+        <img src="../../../public/img/search-icon.png" alt="Search Icon" />
       </button>
     </div>
   );

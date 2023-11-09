@@ -1,10 +1,12 @@
-const Section = ({ title, text, children }) => {
+const Section = ({ title, text, children, className }) => {
   return (
-    <section>
-      <h2>{title}</h2>
-      <p>{text}</p>
-      {children}
+    <section className={className}>
+      <div>
+        <h2>{title}</h2>
+        <p>{text}</p>
+        {children}
+      </div>
     </section>
-  )
-}
-export default Section
+  );
+};
+export default Section;

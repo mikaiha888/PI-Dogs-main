@@ -1,0 +1,31 @@
+.searchbar {
+    margin: 1rem auto;
+    position: relative;
+}
+
+.searchbar input {
+    width: 50vw;
+    padding: 0.5rem 0.75rem;
+    margin: 0.3rem 0;
+    border: solid 1.5px #cccccc;
+    border-radius: 5rem;
+    font-size: 1rem;
+}
+
+.searchbar button {
+    height: 2rem;
+    border: none;
+    background: white;
+    position: absolute;
+    top: 0.55rem;
+    right: 1rem;
+    cursor: pointer;
+}
+
+.searchbar button img {
+    width: 2rem;
+}
+
+.searchbar input:focus {
+    outline: solid 2px rgb(177, 75, 59);
+}

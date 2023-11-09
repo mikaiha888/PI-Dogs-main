@@ -1,13 +1,13 @@
 const axios = require("axios");
 const { Op } = require("sequelize");
-const { Dog } = require("../db");
+const { Dog, Temperament } = require("../db");
 
-const url = "https://api.thedogapi.com/v1/breeds";
-const url_images = "https://cdn2.thedogapi.com/images";
+const URL = "https://api.thedogapi.com/v1/breeds?limit=30";
+const URL_IMAGE = "https://cdn2.thedogapi.com/images";
 
 const getAllDogsControllers = async () => {
   try {
-    const dogs = (await axios.get(url)).data;
+    const dogs = (await axios.get(URL)).data;
     const imageExtensions = [".jpg", ".png"];
     await Promise.all(
       dogs.map(async (dog) => {
@@ -15,25 +15,33 @@ const getAllDogsControllers = async () => {
         for (const extension of imageExtensions) {
           try {
             await axios.get(
-              `${url_images}/${dog.reference_image_id}${extension}`
+              `${URL_IMAGE}/${dog.reference_image_id}${extension}`
             );
             successfulExtension = extension;
           } catch (error) {}
         }
         if (successfulExtension) {
-          await Dog.findOrCreate({
+          const [newDog, created] = await Dog.findOrCreate({
             where: {
               name: dog.name,
-              image: `${url_images}/${dog.reference_image_id}${successfulExtension}`,
+              image: `${URL_IMAGE}/${dog.reference_image_id}${successfulExtension}`,
               height: dog.height.metric,
               weight: dog.weight.metric,
               life_span: dog.life_span,
             },
           });
+          if (dog.temperament) {
+            const [newTemperament, created] = await Temperament.findOrCreate({
+              where: { name: dog.temperament }
+            });
+            await newDog.setTemperaments(newTemperament);
+          }
         }
       })
     );
-    return await Dog.findAll();
+    return await Dog.findAll({
+      include: { model: Temperament, as: 'temperaments' }
+    });
   } catch (error) {
     throw error;
   }
@@ -43,30 +51,33 @@ const getBreedByIdController = async (id, source) => {
   try {
     let breed;
     if (source === "api") {
-      breed = (await axios.get(`${url}/${id}`)).data;
+      breed = (await axios.get(`${URL}/${id}`)).data;
       const imageExtensions = [".jpg", ".png"];
       for (const extension of imageExtensions) {
         try {
           await axios.get(
-            `${url_images}/${breed.reference_image_id}${extension}`
+            `${URL_IMAGE}/${breed.reference_image_id}${extension}`
           );
-          breed.image = `${url_images}/${breed.reference_image_id}${extension}`
+          breed.image = `${URL_IMAGE}/${breed.reference_image_id}${extension}`
         } catch (error) {}
       }
-      if (source === "db") {
-        breed = await Dog.findByPk(id);
-      }
-      return breed;
     }
+    
+    if (source === "db") {
+      breed = await Dog.findByPk(id, {
+        include: [{ model: Temperament, as: 'temperaments' }]
+        });
+      }
+    return breed;
   } catch (error) {
-    throw error;
+    throw new Error (`No se pudo encontrar la raza con el id ${id}`);
   }
 };
 
 const getDogByNameController = async (name) => {
   try {
     const imageExtensions = [".jpg", ".png"];
-    const apiResponse = (await axios.get(url)).data;
+    const apiResponse = (await axios.get(URL)).data;
     const apiBreeds = apiResponse.filter((breed) =>
       breed.name.toLowerCase().includes(name)
     );
@@ -76,14 +87,15 @@ const getDogByNameController = async (name) => {
           [Op.iLike]: `%${name}%`,
         },
       },
+      include: [{ model: Temperament, as: 'temperaments' }]
     });
     const enrichedApiBreeds = apiBreeds.map(async (breed) => {
       for (const extension of imageExtensions) {
         try {
           await axios.get(
-            `${url_images}/${breed.reference_image_id}${extension}`
+            `${URL_IMAGE}/${breed.reference_image_id}${extension}`
           );
-          breed.image = `${url_images}/${breed.reference_image_id}${extension}`;
+          breed.image = `${URL_IMAGE}/${breed.reference_image_id}${extension}`;
         } catch (error) {}
       }
       const matchingDbBreed = dbBreeds.find(
@@ -108,18 +120,37 @@ const getDogByNameController = async (name) => {
   }
 };
 
-const createDogController = async (name, image, height, weight, life_span) => {
+const createDogController = async (name, image, height, weight, life_span, temperament) => {
   try {
-    const newBreed = await Dog.create({
-      name: name,
-      image: image,
-      height: height,
-      weight: weight,
-      life_span: life_span,
+    const [newBreed, created] = await Dog.findOrCreate({
+      where: {
+        name: name,
+      },
+      defaults: {
+        image: image,
+        height: height,
+        weight: weight,
+        life_span: life_span,
+      },
     });
-    return newBreed;
+    if (!created) return { error: 'La raza ya existe en la base de datos.', breed: newBreed };
+    let newTemperament;
+    if (temperament) {
+      try {
+        const [newTemperament, created] = await Temperament.findOrCreate({
+          where: {
+            name: temperament,
+          },
+        });
+        await newBreed.addTemperament(newTemperament);
+        return [newBreed, newTemperament];
+      } catch (error) {
+        throw new Error('Error en la asociación de Temperament y Dog');
+      }
+    }
+    return [newBreed, newTemperament];
   } catch (error) {
-    return res.status(400).send(error.message);
+    throw new Error('No se pudo registrar la nueva raza');
   }
 };
 

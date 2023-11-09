@@ -1,0 +1,98 @@
+.main hr {
+    border: none;
+    height: 30rem;
+    background-color: #313131;
+}
+
+.intro {
+    padding: 8rem 0;
+}
+
+.intro .container {
+    max-width: 1000px;
+    margin: auto;
+    text-align: center;
+}
+
+.intro .container div {
+    padding: 1.5rem 0;
+    line-height: 1.75;
+}
+
+.intro div h2 {
+    font-size: 2rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.15rem;
+}
+
+.intro div p {
+    margin: 2rem;
+    color: #717171;
+    font-size: 1.15rem;
+}
+
+.intro div button {
+    padding: 0.75rem 1.75rem;
+    border: solid 1px #313131;
+    border-radius: .3rem;
+    background: none;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.20rem;
+    cursor: pointer;
+}
+
+.intro div button:hover {
+    color: white;
+    background: #313131;
+    transition: .2s;
+}
+
+.dogForm {
+    padding: 8rem 0;
+}
+
+.dogForm .container {
+    max-width: 1700px;
+    padding: 8rem 5rem;
+    margin: auto;
+    background: #f7f7f4;
+    text-align: center;
+}
+
+.dogForm .container div hr {
+    width: 5rem;
+    height: 0.3rem;
+    margin: auto;
+    border: none;
+    background: rgb(177, 75, 59);
+}
+
+.dogForm .container div h3 {
+    margin-top: 3rem;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.15rem;
+}
+
+.dogForm .container .formText {
+    margin: 2rem;
+    color: #717171;
+    font-size: 1.15rem;
+}
+
+.newBreed {
+    max-width: 500px;
+    margin: auto;
+    margin-top: 5rem;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.newBreed img {
+    margin-top: 5rem;
+}
