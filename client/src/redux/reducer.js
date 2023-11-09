@@ -49,6 +49,10 @@ const reducer = (state = initialState, action) => {
       };
 
     case FILTER:
+      action.payload === "seleccionar" && {
+        ...state,
+        catalogue: [...state.allBreeds],
+      };
       return {
         ...state,
         catalogue: [...state.allBreeds].filter(
@@ -60,6 +64,10 @@ const reducer = (state = initialState, action) => {
       };
 
     case ORDER:
+      action.payload === "seleccionar" && {
+        ...state,
+        catalogue: [...state.allBreeds],
+      };
       const sortedBreeds =
         action.payload === "a-z"
           ? [...state.catalogue].sort((a, b) => a.name.localeCompare(b.name))

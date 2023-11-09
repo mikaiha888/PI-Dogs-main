@@ -14,7 +14,7 @@ const Detail = () => {
   useEffect(() => {
     dispatch(getDetail(id));
   }, []);
-console.log(breed?.temperaments)
+
   return (
     <div className={style.detail}>
       <img src={breed.image} alt={breed.name} />

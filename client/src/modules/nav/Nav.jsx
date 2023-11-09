@@ -1,5 +1,5 @@
-import style from './Nav.module.css';
-import { useLocation } from 'react-router-dom';
+import style from "./Nav.module.css";
+import { useLocation } from "react-router-dom";
 
 import ButtonList from "../../components/button-list/ButtonList";
 
@@ -7,8 +7,10 @@ const Nav = () => {
   const { pathname } = useLocation();
 
   const handleStyle = () => {
-    return pathname !== '/home' ? { position: 'inherit' } : {};
-  }
+    return pathname !== "/home" || pathname !== "/"
+      ? { position: "" }
+      : { position: "inherite"};
+  };
 
   return (
     <nav className={style.nav} style={handleStyle()}>

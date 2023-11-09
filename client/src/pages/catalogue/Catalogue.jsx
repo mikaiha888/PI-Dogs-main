@@ -30,12 +30,10 @@ const Catalogue = () => {
   };
 
   const handleFilter = (e) => {
-    e.target.value !== "Seleccionar filtro" &&
       dispatch(filterCards(e.target.value));
   };
 
   const handleOrder = (e) => {
-    e.target.value !== "Seleccionar orden" &&
       dispatch(orderCards(e.target.value));
   };
 
@@ -45,24 +43,21 @@ const Catalogue = () => {
 
   return (
     <main className={style.catalogue}>
-      <h2>Catálogo</h2>
-      <SearchBar />
-      <Pagination
-        handlePage={handlePageChange}
-        current={currentPage}
-        total={totalPages}
-      />
-      <div className={style.selectorContainer}>
-        <Selector
-          name={"filtro"}
-          options={temperaments}
-          handleChange={handleFilter}
-        />
-        <Selector
-          name={"orden"}
-          options={["a-z", "z-a"]}
-          handleChange={handleOrder}
-        />
+      <div className={style.searchbarContainer}>
+        <h2>Catálogo</h2>
+        <SearchBar />
+        <div className={style.selectorContainer}>
+          <Selector
+            name={"filtro"}
+            options={temperaments}
+            handleChange={handleFilter}
+          />
+          <Selector
+            name={"orden"}
+            options={["a-z", "z-a"]}
+            handleChange={handleOrder}
+          />
+        </div>
       </div>
       <hr />
       <Cards

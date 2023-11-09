@@ -2,7 +2,7 @@ const axios = require("axios");
 const { Op } = require("sequelize");
 const { Temperament } = require("../db");
 
-const URL = "https://api.thedogapi.com/v1/breeds?limit=30";
+const URL = "https://api.thedogapi.com/v1/breeds?limit=60";
 
 const getAllTempsControllers = async () => {
   try {

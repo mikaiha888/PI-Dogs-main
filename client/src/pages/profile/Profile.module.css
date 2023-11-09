@@ -1,0 +1,60 @@
+.profile {
+    margin-top: 12rem;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.profile h2 {
+    font-size: 2rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.15rem;
+}
+
+.profile h3 {
+    width: 80vw;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.1rem;
+}
+
+.profile h4 {
+    color: rgb(177, 75, 59);
+    font-size: 1rem;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.1rem;
+}
+
+.profile p {
+    margin: 2rem;
+    color: #717171;
+    font-size: 1.15rem;
+}
+
+.profileIntroContainer {
+    width: 80vw;
+    margin: 2rem;
+}
+
+.profileInfoContainer {
+    margin: 2rem;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 2rem;
+}
+
+.profileInfoContainer div {
+    width: 25rem;
+    padding: 2rem 0;
+    border: solid 1.5px #ecece9;
+}
+
+.profileInfoContainer div p {
+    font-size: 1rem;
+}

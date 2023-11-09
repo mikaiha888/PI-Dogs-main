@@ -1,6 +1,7 @@
 .detail {
     max-width: 500px;
-    margin: 10rem auto;
+    margin: auto;
+    margin-top: 13rem;
     text-align: center;
     display: flex;
     flex-direction: column;

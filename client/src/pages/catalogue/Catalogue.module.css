@@ -1,5 +1,5 @@
 .catalogue {
-    margin: 2rem 0;
+    margin-top: 8rem;
     text-align: center;
     display: flex;
     flex-direction: column;
@@ -16,8 +16,11 @@
     border: solid 0.75px #ecece9;
 }
 
+.searchbarContainer {
+    margin: 4rem;
+}
+
 .selectorContainer {
-    margin-bottom: 3rem;
     display: flex;
     justify-content: center;
     gap: 1rem;

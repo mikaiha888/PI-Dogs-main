@@ -1,6 +1,7 @@
 .selector {
     width: 200px;
     padding: 0.25rem 0.5rem;
+    margin-top: 1rem;
     border: solid 1.5px #cccccc;
     border-radius: 0.5rem;
     font-size: 0.75rem;
