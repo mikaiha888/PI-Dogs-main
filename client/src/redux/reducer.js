@@ -32,9 +32,10 @@ const reducer = (state = initialState, action) => {
       };
 
     case SEARCH_BREED:
+      console.log(action.payload);
       return {
         ...state,
-        allBreeds: action.payload,
+        catalogue: action.payload,
       };
     case GET_DETAIL:
       return {
@@ -49,19 +50,21 @@ const reducer = (state = initialState, action) => {
       };
 
     case FILTER:
-      action.payload === "seleccionar" && {
-        ...state,
-        catalogue: [...state.allBreeds],
-      };
-      return {
-        ...state,
-        catalogue: [...state.allBreeds].filter(
-          (breed) =>
-            breed.temperaments[0]["name"]
-              .split(", ")
-              .includes(action.payload) || breed.temperamnt
-        ),
-      };
+      const originalBreeds = [...state.allBreeds];
+      return action.payload === "seleccionar"
+        ? {
+            ...state,
+            catalogue: originalBreeds
+          }
+        : {
+            ...state,
+            catalogue: originalBreeds.filter(
+              (breed) =>
+                breed.temperaments[0]["name"]
+                  .split(", ")
+                  .includes(action.payload) || breed.temperamnt
+            ),
+          };
 
     case ORDER:
       action.payload === "seleccionar" && {

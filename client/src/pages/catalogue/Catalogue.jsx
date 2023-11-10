@@ -31,6 +31,7 @@ const Catalogue = () => {
 
   const handleFilter = (e) => {
       dispatch(filterCards(e.target.value));
+      setCurrentPage(1);
   };
 
   const handleOrder = (e) => {

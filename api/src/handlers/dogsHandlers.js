@@ -1,13 +1,13 @@
 const {
-  getAllDogsControllers,
+  getAllDogsController,
   getBreedByIdController,
   getDogByNameController,
-  createDogController
+  createDogController,
 } = require("../controllers/dogsControllers");
 
 const getAllDogs = async (req, res) => {
   try {
-    const response = await getAllDogsControllers();
+    const response = await getAllDogsController();
     res.status(200).json(response);
   } catch (error) {
     res.status(500).send(error.message);
@@ -37,23 +37,30 @@ const getDogByName = async (req, res) => {
 };
 
 const createDog = async (req, res) => {
-    const { name, image, height, weight, life_span, temperament } = req.body;
-    if (!name || !image || !height || !weight || !life_span || !temperament)
-      res.status(400).send("Faltan datos");
-    try {
-        const response = await createDogController(name, image, height, weight, life_span, temperament);
-        if (response.error && response.breed) {
-          return res.status(422).send(response.error);
-        }
-        res.status(201).json(response);
-    } catch (error) {
-        res.status(500).send(error.message);
+  const { name, image, height, weight, life_span, temperament } = req.body;
+  if (!name || !image || !height || !weight || !life_span || !temperament)
+    res.status(400).send("Faltan datos");
+  try {
+    const response = await createDogController({
+      name,
+      image,
+      height,
+      weight,
+      life_span,
+      temperament,
+    });
+    if (response.error && response.breed) {
+      return res.status(422).send(response.error);
     }
-}
+    res.status(201).json(response);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
 
 module.exports = {
   getAllDogs,
   getBreedById,
   getDogByName,
-  createDog
+  createDog,
 };
