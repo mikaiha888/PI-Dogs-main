@@ -22,9 +22,10 @@
     font-weight: 700;
     letter-spacing: 0.20rem;
     flex-basis: 300px;
+    cursor: pointer;
 }
 
 .form button:disabled {
     background: rgb(197, 141, 132);
-    cursor: pointer;
+    cursor: auto;
 }

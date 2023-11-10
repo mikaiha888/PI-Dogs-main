@@ -1,0 +1,12 @@
+.fetchError {
+    min-width: 20vw;
+    padding: 1rem 3rem;
+    margin: auto;
+    outline: solid 1.5px rgba(196, 95, 95, 0.836);
+    border-radius: 0.5rem;
+    background: rgba(248, 231, 231, 0.863);
+    position: fixed;
+    top: 4vh;
+    right: 2vw;
+    z-index: 100;
+}

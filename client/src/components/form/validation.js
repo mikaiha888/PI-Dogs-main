@@ -6,7 +6,7 @@ const validation = (breedData) => {
   let errors = {};
   if (!breedData.name.trim()) {
     errors.name = "*El nombre es obligatorio";
-  } else if (!/^[A-Za-z]+$/.test(breedData.name)) {
+  } else if (!/^[a-zA-Z\s]+$/.test(breedData.name)) {
     errors.name = "*Debe contener solo letras";
   }
 
@@ -19,20 +19,28 @@ const validation = (breedData) => {
 
   if (!breedData.height.trim()) {
     errors.height = "*La altura es obligatoria";
+  } else if (breedData.height.length > 10) {
+    errors.height = "*Debe tener menos de 10 caracteres";
   }
 
   if (!breedData.weight.trim()) {
     errors.weight = "*El peso es obligatorio";
+  } else if (breedData.weight.length > 10) {
+    errors.weight = "*Debe tener menos de 10 caracteres";
   }
 
   if (!breedData.life_span.trim()) {
     errors.life_span = "*La esperanza de vida es obligatoria";
+  } else if (breedData.life_span.length > 20) {
+    errors.life_span = "*Debe tener menos de 20 caracteres";
   }
 
   if (!breedData.temperament.trim()) {
     errors.temperament = "*El temperamento es obligatorio";
-  } else if (!/^[A-Za-z]+$/.test(breedData.name)) {
-    errors.name = "*Debe contener solo letras";
+  } else if (!/^[a-zA-Z\s]+$/.test(breedData.temperament)) {
+    errors.temperament = "*Debe contener solo letras";
+  } else if (breedData.temperament.length > 50) {
+    errors.temperament = "*Límite de caracteres excedido";
   }
 
   return errors;

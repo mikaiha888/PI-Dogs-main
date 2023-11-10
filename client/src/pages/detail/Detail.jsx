@@ -18,12 +18,26 @@ const Detail = () => {
   return (
     <div className={style.detail}>
       <img src={breed.image} alt={breed.name} />
-      <h3>{breed.name}</h3>
-      <p>{breed.temperaments ? breed.temperaments[0]['name'] : breed.temperament}</p>
-      <p>{breed.height?.metric ? `${breed.height.metric} kg` : `${breed.height} kg`}</p>
-      <p>{breed.weight?.metric ? `${breed.weight.metric} kg` : `${breed.weight} kg`}</p>
-      <p>{breed.life_span}</p>
-      <ButtonNormal link={'/dogs'} buttonName={'Back'} />
+      <div>
+        <h3>{breed.name}</h3>
+        <p>
+          {breed.temperaments
+            ? breed.temperaments[0]["name"]
+            : breed.temperament}
+        </p>
+        <p>
+          {breed.height?.metric
+            ? `${breed.height.metric} kg`
+            : `${breed.height} kg`}
+        </p>
+        <p>
+          {breed.weight?.metric
+            ? `${breed.weight.metric} kg`
+            : `${breed.weight} kg`}
+        </p>
+        <p>{breed.life_span}</p>
+      </div>
+      <ButtonNormal link={"/dogs"} buttonName={"Back"} />
     </div>
   );
 };

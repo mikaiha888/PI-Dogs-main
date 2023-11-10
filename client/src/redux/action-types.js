@@ -5,3 +5,4 @@ export const GET_DETAIL = 'GET_DETAIL';
 export const CREATE_DOG = 'CREATE_DOG';
 export const FILTER = 'FILTER';
 export const ORDER = 'ORDER';
+export const FETCH_ERROR = 'FETCH_ERROR';

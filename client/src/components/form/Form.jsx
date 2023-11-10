@@ -9,6 +9,7 @@ import Input from "../input/Input";
 const Form = () => {
   const dispatch = useDispatch();
   const [errors, setErrors] = useState({});
+  const [focusedFields, setFocusedFields] = useState({});
   const [formIsValid, setFormIsValid] = useState(false);
   const [breedData, setBreedData] = useState({
     name: "",
@@ -20,12 +21,15 @@ const Form = () => {
   });
 
   const handleChange = (e) => {
-    setBreedData({ ...breedData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setBreedData({ ...breedData, [name]: value });
+    setFocusedFields({ ...focusedFields, [name]: true });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(createDog({...breedData, image: 'public/img/dogGuide-bg.jpg'}));
+    dispatch(createDog({ ...breedData, image: "public/img/dogGuide-bg.jpg" }));
+    setFocusedFields({});
     setBreedData({
       name: "",
       image: "",
@@ -36,83 +40,35 @@ const Form = () => {
     });
   };
 
+  const handleFocus = (name) => {
+    setFocusedFields({ ...focusedFields, [name]: true });
+  };
+
   useEffect(() => {
-    if (
-      breedData.name !== "" ||
-      breedData.image !== "" ||
-      breedData.height !== "" ||
-      breedData.weight !== "" ||
-      breedData.life_span !== "" ||
-      breedData.temperament !== ""
-    ) {
-      setErrors(validation(breedData));
-      if (
-        errors.name ||
-        errors.image ||
-        errors.height ||
-        errors.weight ||
-        errors.life_span ||
-        errors.temperament
-      ) {
-        setFormIsValid(false);
-      } else {
-        setFormIsValid(true);
-      }
+    if (Object.values(focusedFields).some((isFocused) => isFocused)) {
+      const breedValidated = validation(breedData);
+      setErrors(breedValidated);
+      const hasErrors = Object.values(breedValidated).some((error) => error !== "");
+      setFormIsValid(!hasErrors);
     }
-  }, [breedData]);
+  }, [breedData, focusedFields]);
 
   return (
     <div>
       <form className={style.form} onSubmit={handleSubmit}>
         <div className={style.formContainer}>
-          <Input
-            label={"Name"}
-            name={"name"}
-            type={"text"}
-            value={breedData.name}
-            handleChange={handleChange}
-            errors={errors.name}
-          />
-          <Input
-            label={"Image"}
-            name={"image"}
-            type={"text"}
-            value={breedData.image}
-            handleChange={handleChange}
-            errors={errors.image}
-          />
-          <Input
-            label={"Height"}
-            name={"height"}
-            type={"text"}
-            value={breedData.height}
-            handleChange={handleChange}
-            errors={errors.height}
-          />
-          <Input
-            label={"Weight"}
-            name={"weight"}
-            type={"text"}
-            value={breedData.weight}
-            handleChange={handleChange}
-            errors={errors.weight}
-          />
-          <Input
-            label={"Life span"}
-            name={"life_span"}
-            type={"text"}
-            value={breedData.life_span}
-            handleChange={handleChange}
-            errors={errors.life_span}
-          />
-          <Input
-            label={"Temperament"}
-            name={"temperament"}
-            type={"text"}
-            value={breedData.temperament}
-            handleChange={handleChange}
-            errors={errors.temperament}
-          />
+          {Object.keys(breedData).map((key) => (
+            <Input
+              key={key}
+              label={key.charAt(0).toUpperCase() + key.slice(1)}
+              name={key}
+              type="text"
+              value={breedData[key]}
+              handleChange={handleChange}
+              handleFocus={() => handleFocus(key)}
+              errors={focusedFields[key] && errors[key]}
+            />
+          ))}
         </div>
         <br />
         <button type="submit" disabled={!formIsValid}>

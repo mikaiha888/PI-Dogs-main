@@ -7,6 +7,7 @@ import {
   FILTER,
   ORDER,
   GET_ALL_TEMPERAMENTS,
+  FETCH_ERROR
 } from "./action-types";
 
 const URL = "http://localhost:3001";
@@ -20,8 +21,10 @@ export const getAllBreeds = () => {
         payload: data,
       });
     } catch (error) {
-      alert(error.response.data);
-      throw Error(error.message);
+      dispatch({
+        type: FETCH_ERROR,
+        payload: error.response ? error.response.data : error.message,
+      });
     }
   };
 };
@@ -35,8 +38,10 @@ export const getAllTemperaments = () => {
         payload: data,
       });
     } catch (error) {
-      alert(error.response.data);
-      throw Error(error.message);
+      dispatch({
+        type: FETCH_ERROR,
+        payload: error.response ? error.response.data : error.message,
+      });
     }
   };
 };
@@ -50,8 +55,10 @@ export const searchBreed = (query) => {
         payload: data,
       });
     } catch (error) {
-      alert(error.response.data);
-      throw Error(error.message);
+      dispatch({
+        type: FETCH_ERROR,
+        payload: error.response ? error.response.data : error.message,
+      });
     }
   };
 };
@@ -65,8 +72,10 @@ export const getDetail = (id) => {
         payload: data,
       });
     } catch (error) {
-      alert(error.response.data);
-      throw Error(error.message);
+      dispatch({
+        type: FETCH_ERROR,
+        payload: error.response ? error.response.data : error.message,
+      });
     }
   };
 };
@@ -80,8 +89,10 @@ export const createDog = (body) => {
         payload: data,
       });
     } catch (error) {
-      alert(error.response.data);
-      throw Error(error.message);
+      dispatch({
+        type: FETCH_ERROR,
+        payload: error.response ? error.response.data : error.message,
+      });
     }
   };
 };
@@ -93,8 +104,10 @@ export const filterCards = (data) => {
       payload: data,
     };
   } catch (error) {
-    alert(error.response);
-    throw Error(error.message);
+    dispatch({
+      type: FETCH_ERROR,
+      payload: error.response ? error.response.data : error.message,
+    });
   }
 };
 
@@ -102,7 +115,9 @@ export const orderCards = (order) => {
   try {
     return { type: ORDER, payload: order };
   } catch (error) {
-    alert(error.response);
-    throw Error(error.message);
+    dispatch({
+      type: FETCH_ERROR,
+      payload: error.response ? error.response.data : error.message,
+    });
   }
 };

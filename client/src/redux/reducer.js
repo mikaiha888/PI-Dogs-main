@@ -6,6 +6,7 @@ import {
   CREATE_DOG,
   ORDER,
   FILTER,
+  FETCH_ERROR,
 } from "./action-types";
 
 const initialState = {
@@ -14,6 +15,7 @@ const initialState = {
   breed: {},
   newBreed: [],
   temperaments: [],
+  fetchError: "",
 };
 
 const reducer = (state = initialState, action) => {
@@ -32,7 +34,6 @@ const reducer = (state = initialState, action) => {
       };
 
     case SEARCH_BREED:
-      console.log(action.payload);
       return {
         ...state,
         catalogue: action.payload,
@@ -54,15 +55,18 @@ const reducer = (state = initialState, action) => {
       return action.payload === "seleccionar"
         ? {
             ...state,
-            catalogue: originalBreeds
+            catalogue: originalBreeds,
           }
         : {
             ...state,
-            catalogue: originalBreeds.filter(
-              (breed) =>
-                breed.temperaments[0]["name"]
-                  .split(", ")
-                  .includes(action.payload) || breed.temperamnt
+            catalogue: originalBreeds.filter((breed) =>
+              breed.temperaments && breed.temperaments[0]?.name
+                ? breed.temperaments[0].name
+                    .split(", ")
+                    .includes(action.payload)
+                : breed.temperament
+                ? breed.temperament.split(", ").includes(action.payload)
+                : false
             ),
           };
 
@@ -78,6 +82,12 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         catalogue: sortedBreeds,
+      };
+
+    case FETCH_ERROR:
+      return {
+        ...state,
+        fetchError: action.payload,
       };
 
     default:
