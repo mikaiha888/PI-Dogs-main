@@ -6,7 +6,7 @@
 
 .searchbar input {
     width: 50vw;
-    padding: 0.5rem 0.75rem;
+    padding: 0.5rem 1.5rem;
     margin: 0.3rem 0;
     border: solid 1.5px #cccccc;
     border-radius: 5rem;
@@ -19,7 +19,7 @@
     background: white;
     position: absolute;
     top: 0.55rem;
-    right: 1rem;
+    right: 1.25rem;
     cursor: pointer;
 }
 
@@ -29,4 +29,5 @@
 
 .searchbar input:focus {
     outline: solid 2px rgb(177, 75, 59);
+    outline-offset: -0.2rem;
 }

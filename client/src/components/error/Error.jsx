@@ -1,14 +1,16 @@
 import style from "./Error.module.css";
 import { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
 
 const Error = ({ error }) => {
+  const dispatch = useDispatch();
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     if (error) setVisible(true);
     const timer = setTimeout(() => {
       setVisible(false);
-    }, 5000);
+    }, 2000);
     return () => clearTimeout(timer);
   }, [error]);
 

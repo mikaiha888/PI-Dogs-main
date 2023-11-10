@@ -7,6 +7,7 @@ import {
   ORDER,
   FILTER,
   FETCH_ERROR,
+  HANDLE_ERROR
 } from "./action-types";
 
 const initialState = {
@@ -15,7 +16,7 @@ const initialState = {
   breed: {},
   newBreed: [],
   temperaments: [],
-  fetchError: "",
+  fetchError: null,
 };
 
 const reducer = (state = initialState, action) => {
@@ -87,7 +88,13 @@ const reducer = (state = initialState, action) => {
     case FETCH_ERROR:
       return {
         ...state,
-        fetchError: action.payload,
+        fetchError: [action.payload],
+      };
+
+    case HANDLE_ERROR:
+      return {
+        ...state,
+        fetchError: state.fetchError.slice(1),
       };
 
     default:

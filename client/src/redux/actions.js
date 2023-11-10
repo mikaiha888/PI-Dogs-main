@@ -7,7 +7,8 @@ import {
   FILTER,
   ORDER,
   GET_ALL_TEMPERAMENTS,
-  FETCH_ERROR
+  FETCH_ERROR,
+  HANDLE_ERROR,
 } from "./action-types";
 
 const URL = "http://localhost:3001";
@@ -16,7 +17,7 @@ export const getAllBreeds = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(`${URL}/dogs`);
-      return dispatch({
+      dispatch({
         type: GET_ALL_BREEDS,
         payload: data,
       });
@@ -33,7 +34,7 @@ export const getAllTemperaments = () => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(`${URL}/temperaments`);
-      return dispatch({
+      dispatch({
         type: GET_ALL_TEMPERAMENTS,
         payload: data,
       });
@@ -50,7 +51,7 @@ export const searchBreed = (query) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(`${URL}/dogs/search?name=${query}`);
-      return dispatch({
+      dispatch({
         type: SEARCH_BREED,
         payload: data,
       });
@@ -67,7 +68,7 @@ export const getDetail = (id) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.get(`${URL}/dogs/${id}`);
-      return dispatch({
+      dispatch({
         type: GET_DETAIL,
         payload: data,
       });
@@ -84,7 +85,7 @@ export const createDog = (body) => {
   return async (dispatch) => {
     try {
       const { data } = await axios.post(`${URL}/dogs`, body);
-      return dispatch({
+      dispatch({
         type: CREATE_DOG,
         payload: data,
       });
@@ -98,26 +99,16 @@ export const createDog = (body) => {
 };
 
 export const filterCards = (data) => {
-  try {
-    return {
-      type: FILTER,
-      payload: data,
-    };
-  } catch (error) {
-    dispatch({
-      type: FETCH_ERROR,
-      payload: error.response ? error.response.data : error.message,
-    });
-  }
+  return {
+    type: FILTER,
+    payload: data,
+  };
 };
 
 export const orderCards = (order) => {
-  try {
-    return { type: ORDER, payload: order };
-  } catch (error) {
-    dispatch({
-      type: FETCH_ERROR,
-      payload: error.response ? error.response.data : error.message,
-    });
-  }
+  return { type: ORDER, payload: order };
 };
+
+export const handleError = () => ({
+  type: HANDLE_ERROR,
+});

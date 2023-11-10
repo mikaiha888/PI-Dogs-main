@@ -47,19 +47,26 @@ const Catalogue = () => {
       <div className={style.searchbarContainer}>
         <h2>Catálogo</h2>
         <SearchBar />
-        <div className={style.selectorContainer}>
+        <div className={style.selectorContainer} >
           <Selector
             name={"filtro"}
             options={temperaments}
             handleChange={handleFilter}
+            disabled={!catalogue.length}
           />
           <Selector
             name={"orden"}
             options={["a-z", "z-a"]}
             handleChange={handleOrder}
+            disabled={!catalogue.length}
           />
         </div>
       </div>
+      <Pagination
+        handlePage={handlePageChange}
+        current={currentPage}
+        total={totalPages}
+      />
       <hr />
       <Cards
         currentPage={currentPage}

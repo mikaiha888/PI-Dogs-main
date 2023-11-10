@@ -22,7 +22,7 @@
     cursor: default;
 }
 
-.current {
+.pagination .current {
     color: rgb(177, 75, 59);;
-    font-weight: 900;
+    font-weight: 700;
 }
