@@ -1,7 +1,7 @@
 const axios = require("axios");
 const { Dog, Temperament } = require("../../db");
 
-const URL = "https://api.thedogapi.com/v1/breeds?limit=20";
+const URL = "https://api.thedogapi.com/v1/breeds?limit=80";
 const URL_ID = "https://api.thedogapi.com/v1/breeds";
 const URL_IMAGE = "https://cdn2.thedogapi.com/images";
 
