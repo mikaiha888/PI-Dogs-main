@@ -7,8 +7,8 @@ const URL_IMAGE = "https://cdn2.thedogapi.com/images";
 
 const fetchBreedsFromAPI = async () => {
   try {
-    const response = await axios.get(URL);
-    return response.data;
+    const breed = (await axios.get(URL)).data;
+    return breed;
   } catch (error) {
     throw error;
   }
@@ -108,6 +108,21 @@ const associateTemperamentWithDog = async (dog, temperament) => {
   }
 };
 
+const getAllTemperamentsFromDb = async () => {
+  try {
+    const temperaments = await Temperament.findAll();
+    return [
+      ...new Set(
+        temperaments.flatMap((temp) =>
+          temp.name.split(", ").map((t) => t.trim())
+        )
+      ),
+    ];
+  } catch (error) {
+    throw error;
+  }
+};
+
 module.exports = {
   fetchBreedsFromAPI,
   enrichBreedWithImages,
@@ -118,4 +133,5 @@ module.exports = {
   createDogInDatabase,
   findOrCreateTemperament,
   associateTemperamentWithDog,
+  getAllTemperamentsFromDb
 };
