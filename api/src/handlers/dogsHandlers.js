@@ -2,6 +2,7 @@ const {
   getAllDogsController,
   getBreedByIdController,
   getDogByNameController,
+  filterDogController,
   createDogController,
 } = require("../controllers/dogsControllers");
 
@@ -36,6 +37,17 @@ const getDogByName = async (req, res) => {
   }
 };
 
+const filterDog = async (req, res) => {
+  try {
+    const filter = req.query.filter.toLowerCase();
+    if (!filter) res.status(400).send("Faltan datos");
+    const response = await filterDogController(filter);
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).send(error.message);
+  }
+};
+
 const createDog = async (req, res) => {
   const { name, image, height, weight, life_span, temperament } = req.body;
   if (!name || !image || !height || !weight || !life_span || !temperament)
@@ -63,4 +75,5 @@ module.exports = {
   getBreedById,
   getDogByName,
   createDog,
+  filterDog
 };

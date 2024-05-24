@@ -7,14 +7,16 @@ import {
   ORDER,
   FILTER,
   FETCH_ERROR,
-  HANDLE_ERROR
+  HANDLE_ERROR,
+  HANDLE_WEIGHT,
+  FILTER_BY_DB_API,
 } from "./action-types";
 
 const initialState = {
   allBreeds: [],
   catalogue: [],
   breed: {},
-  newBreed: [],
+  newBreed: {},
   temperaments: [],
   fetchError: null,
 };
@@ -61,21 +63,41 @@ const reducer = (state = initialState, action) => {
         : {
             ...state,
             catalogue: originalBreeds.filter((breed) =>
-              breed.temperaments && breed.temperaments[0]?.name
-                ? breed.temperaments[0].name
-                    .split(", ")
-                    .includes(action.payload)
-                : breed.temperament
-                ? breed.temperament.split(", ").includes(action.payload)
-                : false
+              breed.temperament.name.split(", ").includes(action.payload)
             ),
           };
 
-    case ORDER:
-      action.payload === "seleccionar" && {
+    case FILTER_BY_DB_API:
+      // console.log(
+      //   action.payload.filter((obtainedBreed) =>
+      //     [...state.catalogue].some(
+      //       (breed) => breed.name === obtainedBreed.name
+      //     )
+      //   )
+      // );
+
+      console.log(
+        action.payload.breeds.filter((obtainedBreed) =>
+          obtainedBreed.image.includes("public")
+        )
+      );
+      return {
         ...state,
-        catalogue: [...state.allBreeds],
+        catalogue:
+          action.payload.method === "db"
+            ? action.payload.breeds.filter((obtainedBreed) =>
+                obtainedBreed.image.includes("public")
+              )
+            : action.payload.breeds,
       };
+
+    case ORDER:
+      if (action.payload === "seleccionar") {
+        return {
+          ...state,
+          catalogue: originalBreeds,
+        };
+      }
       const sortedBreeds =
         action.payload === "a-z"
           ? [...state.catalogue].sort((a, b) => a.name.localeCompare(b.name))
@@ -83,6 +105,24 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         catalogue: sortedBreeds,
+      };
+
+    case HANDLE_WEIGHT:
+      action.payload === "seleccionar" && {
+        ...state,
+        catalogue: originalBreeds,
+      };
+      const sortedBreedsByWeight = [...state.catalogue].sort((a, b) => {
+        const averageWeightA = (a.weight.min + a.weight.max || 0) / 2;
+        const averageWeightB = (b.weight.min + b.weight.max || 0) / 2;
+
+        return action.payload === "Mas liviano"
+          ? averageWeightA - averageWeightB
+          : averageWeightB - averageWeightA;
+      });
+      return {
+        ...state,
+        catalogue: sortedBreedsByWeight,
       };
 
     case FETCH_ERROR:

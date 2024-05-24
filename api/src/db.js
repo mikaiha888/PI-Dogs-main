@@ -24,8 +24,8 @@ sequelize.models = Object.fromEntries(capsEntries);
 
 const { Dog, Temperament } = sequelize.models;
 
-Dog.belongsToMany(Temperament, { through: "dog_temperament" });
-Temperament.belongsToMany(Dog, { through: "dog_temperament" })
+Dog.belongsToMany(Temperament, { through: "dog_temperament", as: 'temperaments' });
+Temperament.belongsToMany(Dog, { through: "dog_temperament", as: 'dogs' })
 
 module.exports = {
   ...sequelize.models,

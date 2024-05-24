@@ -20,25 +20,73 @@ module.exports = (sequelize) => {
       isUrl: true,
     },
     height: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
       allowNull: false,
       validate: {
-        len: [1, 10]
-      }
+        isHeightValid(value) {
+          if (!value || typeof value !== 'object') {
+            throw new Error('La propiedad "height" debe ser un objeto.');
+          }
+      
+          if (!('min' in value)) {
+            throw new Error('El objeto "height" debe tener la propiedad "min".');
+          }
+      
+          if (typeof value.min !== 'number') {
+            throw new Error('El valor de "min" debe ser un número.');
+          }
+      
+          if (value.min > value.max) {
+            throw new Error('El valor "min" debe ser menor que el valor "max".');
+          }
+        },
+      },
     },
     weight: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
       allowNull: false,
       validate: {
-        len: [1, 10]
-      }
+        isWeightValid(value) {
+          if (!value || typeof value !== 'object') {
+            throw new Error('La propiedad "weight" debe ser un objeto.');
+          }
+      
+          if (!('min' in value)) {
+            throw new Error('El objeto "weight" debe tener la propiedad "min".');
+          }
+      
+          if (typeof value.min !== 'number') {
+            throw new Error('El valor de "min" debe ser un número.');
+          }
+      
+          if (value.min > value.max) {
+            throw new Error('El valor "min" debe ser menor que el valor "max".');
+          }
+        },
+      },
     },
     life_span: {
-      type: DataTypes.STRING,
+      type: DataTypes.JSON,
       allowNull: false,
       validate: {
-        len: [1, 20]
-      }
+        isLifeSpanValid(value) {
+          if (!value || typeof value !== 'object') {
+            throw new Error('La propiedad "life_span" debe ser un objeto.');
+          }
+  
+          if (!('min' in value)) {
+            throw new Error('El objeto "life_span" debe tener la propiedad "min".');
+          }
+  
+          if (typeof value.min !== 'number') {
+            throw new Error('El valor de "min" debe ser un número.');
+          }
+  
+          if (value.min > value.max) {
+            throw new Error('El valor "min" debe ser menor que el valor "max".');
+          }
+        },
+      },
     },    
   }, { timestamps: false });
 };

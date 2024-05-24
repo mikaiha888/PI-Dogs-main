@@ -35,8 +35,13 @@
 }
 
 .infoContainer p {
+    width: 250px;
     padding: 0.5rem 0;
+    margin: auto;
     color: #717171;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }   
 
 .infoContainer button {

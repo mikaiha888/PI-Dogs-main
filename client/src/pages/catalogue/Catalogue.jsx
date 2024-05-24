@@ -4,8 +4,10 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   filterCards,
   getAllBreeds,
-  getAllTemperaments,
   orderCards,
+  handleWeight,
+  getAllTemperaments,
+  filterCardsByDbOrApi,
 } from "../../redux/actions";
 
 import Cards from "../../components/cards/Cards";
@@ -19,26 +21,38 @@ const Catalogue = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 12;
 
-  useEffect(() => {
-    dispatch(getAllBreeds());
-  }, []);
-
   const totalPages = Math.ceil(catalogue.length / itemsPerPage);
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
   };
 
+  const handlePageReset = () => {
+    setCurrentPage(1);
+  };
+
   const handleFilter = (e) => {
+    if (e.target.name === "Filter") {
+      dispatch(filterCardsByDbOrApi(e.target.value));
+      handlePageReset();
+    } else {
       dispatch(filterCards(e.target.value));
-      setCurrentPage(1);
+      handlePageReset();
+    }
   };
 
   const handleOrder = (e) => {
+    if (e.target.value.includes("-")) {
       dispatch(orderCards(e.target.value));
+      handlePageReset();
+    } else {
+      dispatch(handleWeight(e.target.value));
+      handlePageReset();
+    }
   };
 
   useEffect(() => {
+    dispatch(getAllBreeds());
     dispatch(getAllTemperaments());
   }, []);
 
@@ -46,17 +60,33 @@ const Catalogue = () => {
     <main className={style.catalogue}>
       <div className={style.searchbarContainer}>
         <h2>Catálogo</h2>
-        <SearchBar />
-        <div className={style.selectorContainer} >
+        <SearchBar handlePage={handlePageReset} />
+        <div className={style.selectorContainer}>
           <Selector
-            name={"filtro"}
+            name={"Filter"}
+            text={"Seleccionar filtro"}
+            options={["Base de datos", "Api"]}
+            handleChange={handleFilter}
+            disabled={!catalogue.length}
+          />
+          <Selector
+            name={"temperamentFilter"}
+            text={"Seleccionar temperamento"}
             options={temperaments}
             handleChange={handleFilter}
             disabled={!catalogue.length}
           />
           <Selector
-            name={"orden"}
+            name={"alphabeticalOrder"}
+            text={"Ordenar por abecedario"}
             options={["a-z", "z-a"]}
+            handleChange={handleOrder}
+            disabled={!catalogue.length}
+          />
+          <Selector
+            name={"weightOrder"}
+            text={"Ordenar por peso"}
+            options={["Mas liviano", "Mas pesado"]}
             handleChange={handleOrder}
             disabled={!catalogue.length}
           />

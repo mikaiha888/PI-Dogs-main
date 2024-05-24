@@ -4,16 +4,18 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { searchBreed } from "../../redux/actions";
 
-const SearchBar = () => {
+const SearchBar = ({ handlePage }) => {
   const dispatch = useDispatch();
   const [query, setQuery] = useState("");
 
   const handleChange = (e) => {
     setQuery(e.target.value);
+    handlePage()
   };
 
   const handleSearch = () => {
     dispatch(searchBreed(query));
+    handlePage()
   };
 
   const handleEnter = (e) => {

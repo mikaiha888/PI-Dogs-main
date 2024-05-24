@@ -4,7 +4,7 @@ const Landing = () => {
   return (
     <section className={style.dogGuide}>
       <h1>The Dog Guide</h1>
-      <p>Conocer mejor a tu compañero de vida</p>
+      <p>Conoce mejor a tu compañero de vida</p>
     </section>
   );
 };

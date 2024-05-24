@@ -7,7 +7,6 @@ import ButtonNormal from "../../components/button-normal/ButtonNormal";
 
 const Home = () => {
   const { newBreed } = useSelector((state) => state);
-  const [breed, temperament] = newBreed;
 
   return (
     <main className={style.main}>
@@ -47,14 +46,26 @@ const Home = () => {
           </div>
           <Form />
         </div>
-        {breed && (
+        {newBreed && (
           <div className={style.newBreed}>
-            <img src={breed.image} alt={breed.name} />
-            <h3>{breed.name}</h3>
-            <p>{temperament.name}</p>
-            <p>{breed.height}</p>
-            <p>{breed.weight}</p>
-            <p>{breed.life_span}</p>
+            <img src={newBreed.image} alt={newBreed.name} />
+            <h3>{newBreed.name}</h3>
+            <p>{newBreed.temperament?.name}</p>
+            <p>
+              {newBreed.height?.max
+                ? `${newBreed.height?.min} - ${newBreed.height?.max} cm`
+                : `${newBreed.height?.min} cm`}
+            </p>
+            <p>
+              {newBreed.weight?.max
+                ? `${newBreed.weight?.min} - ${newBreed.weight?.max} kg`
+                : `${newBreed.weight?.min} kg`}
+            </p>
+            <p>
+              {newBreed.life_span?.max
+                ? `${newBreed.life_span?.min} - ${newBreed.life_span?.max} years`
+                : `${newBreed.life_span?.min} years`}
+            </p>
           </div>
         )}
       </section>

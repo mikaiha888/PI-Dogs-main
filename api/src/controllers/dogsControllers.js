@@ -2,11 +2,14 @@ const { Op } = require("sequelize");
 const { Dog, Temperament } = require("../db");
 const {
   fetchBreedsFromAPI,
+  fetchBreedsFromDB,
   enrichBreedWithImages,
-  findMatchingDbBreeds,
-  removeDuplicates,
+  splitAndParse,
+  processBreed,
   fetchBreedByIdFromAPI,
   fetchBreedByIdFromDB,
+  findMatchingDbBreeds,
+  removeDuplicates,
   createDogInDatabase,
   findOrCreateTemperament,
   associateTemperamentWithDog,
@@ -17,17 +20,11 @@ const imageExtensions = [".jpg", ".png"];
 const getAllDogsController = async () => {
   try {
     const apiBreeds = await fetchBreedsFromAPI();
-    const dbBreeds = await Dog.findAll({
-      include: [{ model: Temperament, as: "temperaments" }],
-    });
     const enrichedApiBreeds = await Promise.all(
       apiBreeds.map((breed) => enrichBreedWithImages(breed, imageExtensions))
     );
-    const matchingBreeds = removeDuplicates([
-      ...enrichedApiBreeds,
-      ...dbBreeds,
-    ]);
-    return matchingBreeds;
+    const dbBreedInfo = await Promise.all(enrichedApiBreeds.map(processBreed));
+    return dbBreedInfo;
   } catch (error) {
     throw error;
   }
@@ -39,6 +36,7 @@ const getBreedByIdController = async (id, source) => {
     if (source === "api") {
       breed = await fetchBreedByIdFromAPI(id);
       breed = await enrichBreedWithImages(breed, imageExtensions);
+      breed = await splitAndParse(breed);
     } else if (source === "db") {
       breed = await fetchBreedByIdFromDB(id);
     }
@@ -65,7 +63,11 @@ const getDogByNameController = async (name) => {
     const enrichedApiBreeds = await Promise.all(
       apiBreeds
         .filter((breed) => breed.name.toLowerCase().includes(name))
-        .map((breed) => enrichBreedWithImages(breed, imageExtensions))
+        .map(async (breed) => {
+          await enrichBreedWithImages(breed, imageExtensions);
+          splitAndParse(breed);
+          return breed;
+        })
     );
     const matchingDbBreeds = findMatchingDbBreeds(enrichedApiBreeds, dbBreeds);
     const matchingBreeds = removeDuplicates([
@@ -82,17 +84,42 @@ const getDogByNameController = async (name) => {
   }
 };
 
+const filterDogController = async (filter) => {
+  try {
+    if (filter === 'db') {
+      const dbResponse = await fetchBreedsFromDB();
+      return dbResponse;
+    } else {
+      let apiResponse = await fetchBreedsFromAPI();
+      apiResponse = apiResponse.map(async breed => {
+        breed = await enrichBreedWithImages(breed, imageExtensions);
+        breed = await splitAndParse(breed);
+        return breed
+      })
+      return Promise.all(apiResponse);
+    }
+    
+  } catch (error) {
+    throw error;
+  }
+}
+
 const createDogController = async (newDogData) => {
   try {
-    const newDog = await createDogInDatabase(newDogData);
-    if (newDogData.temperament) {
-      const newTemperament = await findOrCreateTemperament(
-        newDogData.temperament
-      );
-      await associateTemperamentWithDog(newDog, newTemperament);
-      return [newDog, newTemperament];
-    }
-    return [newDog, null];
+    const [newDog, newTemperament] = await createDogInDatabase(newDogData);
+    await associateTemperamentWithDog(newDog, newTemperament);
+    return {
+      id: newDog.id,
+      name: newDog.name,
+      image: newDog.image,
+      height: newDog.height,
+      weight: newDog.weight,
+      life_span: newDog.life_span,
+      temperament: {
+        id: newTemperament.id,
+        name: newTemperament.name,
+      },
+    };
   } catch (error) {
     throw error;
   }
@@ -102,5 +129,6 @@ module.exports = {
   getAllDogsController,
   getBreedByIdController,
   getDogByNameController,
+  filterDogController,
   createDogController,
 };

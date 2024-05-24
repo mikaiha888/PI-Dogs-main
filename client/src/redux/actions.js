@@ -1,14 +1,16 @@
 import axios from "axios";
 import {
   GET_ALL_BREEDS,
+  GET_ALL_TEMPERAMENTS,
   SEARCH_BREED,
   GET_DETAIL,
   CREATE_DOG,
   FILTER,
+  FILTER_BY_DB_API,
   ORDER,
-  GET_ALL_TEMPERAMENTS,
   FETCH_ERROR,
   HANDLE_ERROR,
+  HANDLE_WEIGHT,
 } from "./action-types";
 
 const URL = "http://localhost:3001";
@@ -105,6 +107,25 @@ export const filterCards = (data) => {
   };
 };
 
+export const filterCardsByDbOrApi = (method) => {
+  return async (dispatch) => {
+    try {
+      const { data } = await axios.get(
+        `${URL}/dogs/filter?filter=${method === "Base de datos" ? "db" : "api"}`
+      );
+      dispatch({
+        type: FILTER_BY_DB_API,
+        payload: { breeds: data, method: method === "Base de datos" ? "db" : "api" },
+      });
+    } catch (error) {
+      dispatch({
+        type: FETCH_ERROR,
+        payload: error.response ? error.response.data : error.message,
+      });
+    }
+  };
+};
+
 export const orderCards = (order) => {
   return { type: ORDER, payload: order };
 };
@@ -112,3 +133,7 @@ export const orderCards = (order) => {
 export const handleError = () => ({
   type: HANDLE_ERROR,
 });
+
+export const handleWeight = (weight) => {
+  return { type: HANDLE_WEIGHT, payload: weight };
+};
